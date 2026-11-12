@@ -35,14 +35,17 @@ def create_customer():
         print('Invalid form data')
         return jsonify({'error': 'Invalid form data'}), 400
 
-    new_customer = Customer(name=data['name'], city=data['city'], age=data['age'])
 
     try:
+        new_customer = Customer(name=data['name'], city=data['city'], age=data['age'])
         # Add the new customer to the session and commit to save to the database
         db.session.add(new_customer)
         db.session.commit()
         print('Customer added succesfully')
         return redirect(url_for('customers.list_customers'))
+    except ValueError as ve:
+        db.session.rollback()
+        return jsonify({'error': str(ve)}), 400
     except Exception as e:
         # Handle any exceptions, such as database errors
         db.session.rollback()
@@ -93,6 +96,9 @@ def edit_customer(customer_id):
         db.session.commit()
         print('Customer updated succesfully')
         return redirect(url_for('customers.list_customers'))
+    except ValueError as ve:
+        db.session.rollback()
+        return jsonify({'error': str(ve)}), 400
     except Exception as e:
         # Handle any exceptions
         db.session.rollback()

@@ -1,6 +1,7 @@
 from project import db, app
 import re
-
+import html
+from sqlalchemy.orm import validates
 
 # Book model
 class Book(db.Model):
@@ -11,6 +12,15 @@ class Book(db.Model):
     year_published = db.Column(db.Integer) 
     book_type = db.Column(db.String(20))
     status = db.Column(db.String(20), default='available')
+
+    @validates('name', 'author', 'book_type')
+    def validate_xss(self, key, value):
+        if not value:
+            return value
+        xss_pattern = re.compile(r'<[^>]*>|javascript:|onerror=|onload=|onmouseover=', re.IGNORECASE)
+        if xss_pattern.search(str(value)):
+            raise ValueError(f"Wykryto niedozwolone znaki HTML/JS w polu: {key}")
+        return str(value).strip()
 
     def __init__(self, name, author, year_published, book_type, status='available'):
         self.name = name
