@@ -1,5 +1,7 @@
 # Zadanie 1 – Domain-Driven Design (Bezpieczna Aplikacja Bankowa)
 
+## Karol Łukasik 310801
+
 ## Opis zadania
 Celem zadania jest zamodelowanie wybranego fragmentu bezpiecznej aplikacji bankowej (procesu inicjowania, autoryzacji i realizacji przelewu wychodzącego) zgodnie z zasadami Domain-Driven Design. System podzielono na trzy konteksty ograniczone, pomiędzy którymi granice pełnią rolę granic zaufania i minimalizacji danych.
 
